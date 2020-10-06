@@ -1,23 +1,40 @@
-import java.text.ParseException;
+import java.awt.List;
 import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 public class HotelReservationMain {
 	Hotel h = new Hotel();
 	
-	public void noOfDays(String startDay, String endDay) {
+	public static void hotelInitialze() {
+		Scanner sc = new Scanner(System.in);
+		Hotel h1 = new Hotel();
+		System.out.println("Please enter the name of the hotel");
+		h1.setName(sc.next());
+		System.out.println("Please enter the regular price of the hotel");
+		h1.setRate(sc.nextInt());
+//		hotelList.getHotelList().add(h1);
+	}
+	public static int noOfDays(String startDay, String endDay) {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MM yyyy");
-
 		LocalDate date1 = LocalDate.parse(startDay, dtf);
 		LocalDate date2 = LocalDate.parse(endDay, dtf);
-		long daysBetween = Duration.between(date1, date2).toDays();
-		System.out.println ("Days: " + daysBetween);
+		return (int) Duration.between(date1, date2).toDays();
 	}
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		HotelList hotelList = new HotelList();
+		hotelList.setHotelList(new ArrayList<Hotel>());
+		Scanner sc = new Scanner(System.in);
 		System.out.println("Welcome to the Hotel Management System");
+		System.out.println("Please enter the start date in the format dd MM yyyy");
+		String startDay = sc.next();
+		System.out.println("Please enter the end date in the format dd MM yyyy");
+		String endDay = sc.next();
+		int days = noOfDays(startDay,endDay);
+		Optional<Hotel> hotel = hotelList.getHotelList().stream().min(Comparator.comparing(Hotel::getRate));
+		System.out.println("The hotel with the cheapest price for the given start date and end date is :" +hotel.get().getName()+ " and the price is : "+hotel.get().getRate()*days);
+		
 	}
 
 }
